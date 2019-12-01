@@ -1,0 +1,94 @@
+
+<?php
+include '../../conexion/conexion.php';
+?>
+<!-- codigo para la busqueda -->
+<div class="alert alert-info">
+            <label>&nbsp;BUSQUEDA  :&nbsp;</label>
+            <input type="text" id="Txt_Buscar" placeholder="Digite su busqueda..." name="Txt_Buscar" value="" />
+        </div>
+        
+        <!-- codigo para la tabla con boostrap 4 -->
+
+<table class=" table  responsive-table table-bordered  z-depth-1 centered table-hover input-xs table-striped  nowrap " id="Tab_Filter">
+ <thead class="bg-info text-white">
+   <tr>
+     <th data-field="Descripción">Descripción del Horario</th>
+     <th data-field="Instructor">Instructor</th>
+     
+     <th data-field="Cupo">Cupo</th>
+     <th data-field="Inscritos">Inscritos</th>
+     <th data-field="Grupo">Grupo</th>
+     <th data-field="accion">Accion</th>
+   </tr>
+ </thead>
+
+ <tbody >
+   <?php
+$consulta_citas=$pdo->query("SELECT * from v_horario");
+if($consulta_citas->rowCount() == 0){
+    echo "<tr>
+      <td colspan='5'>No hay Horarios asignados</td>
+    </tr>";
+   }
+   else {
+foreach ($consulta_citas as $row) :
+   ?>
+   
+   <tr>
+     
+     <td><?= $row["Hora"] ?></td>
+     <td  ><?= $row['Instructor'];?></td>
+
+     <td><?= $row["Total"] ?></td>
+     <td><?= $ninscritos ?></td>
+     <td><button class="btn btn-success " title="Ver grupo de trabajo "?>" ><i class="dripicons-user-group"></i></button> </td>
+ 
+     <td>
+     <button class="btn btn-success " title="Editar "  ><i class="dripicons-document-edit"></i></button> 
+
+
+<button class="btn btn-warning" title="Eliminar" ><i class="mdi mdi-window-close"></i></button> 
+<button class="btn btn-info" title="Imprimir "><i class="dripicons-print"></i></button> </td>
+
+     </td>
+
+   </tr>
+ <?php endforeach ?>
+
+<?php } ?>
+</tbody>
+</table>
+        <!-- codigo para el paginador -->
+
+<ul class="pagination" id="NavPosicion_b"></ul>
+
+        <!-- agego los scripts para el paginador y buscador -->
+
+<script src="../js/paging.js"></script>
+<script src="../js/jquery_searchtable.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+        <!-- codigo paraacrgar scripts de jsr -->
+
+  // $.getScript("categorias/static/js/actions.js")
+  
+          <!-- codigo para cativar el paginador -->
+
+
+  var pager = new Pager('Tab_Filter', 5);
+  pager.init();
+  pager.showPageNav('pager', 'NavPosicion_b');
+  pager.showPage(1);
+          <!-- codigo para cativar el buscador -->
+
+  $(document).ready(function() {
+    $(function() {
+      theTable = $("#Tab_Filter");
+      $("#Txt_Buscar").keyup(function() {
+        $.uiTableFilter(theTable, this.value);
+      });
+    });
+  });
+</script>
